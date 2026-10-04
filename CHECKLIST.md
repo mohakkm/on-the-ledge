@@ -9,13 +9,15 @@
 - [x] Live local MySQL database `on_the_ledge` created and seeded (outside this app; do not re-run casually)
 - [x] Confirm app targets MySQL via `mysql2` (not Supabase / Postgres)
 
-## PHASE 2 — DATABASE INTELLIGENCE
+## PHASE 2 — DATABASE INTELLIGENCE (Review 2)
 
-- [ ] Add a SQL view (or routine) for category remaining = allocated − spent
-- [ ] Add a SQL view for budget remaining = budget total − spent
+- [x] Package Review 2 SQL under `database/` (schema, seed, routines, demos, README)
+- [x] Preserve exactly five tables; no audit/extra business tables
+- [x] Experiment 4B demos: constraints + UNION / UNION ALL / INTERSECT / EXCEPT
+- [x] Experiment 5 demos: subqueries, INNER/LEFT JOIN, remaining view
+- [x] Experiment 6: function, procedures, cursor proc, BEFORE INSERT/UPDATE triggers
+- [x] `sp_add_transaction_safe` with `DECLARE EXIT HANDLER FOR SQLEXCEPTION` + ROLLBACK
 - [ ] Decide whether allocation totals must be constrained to `<= budgets.total_amount`
-- [ ] Add any extra indexes justified by remaining-balance queries
-- [ ] Keep reusable query examples for reviews
 - [ ] Keep intelligence in SQL; do not move remaining balances into stored columns unless explicitly instructed
 
 ## PHASE 3 — APPLICATION / MVP

@@ -8,23 +8,19 @@ The product is **not** currently a bank, UPI, payment, investment, or advice app
 
 ## Current architecture
 
-Review-1 layers:
+Review-2 database package is the backend source of truth under `database/`.
 
-1. **MySQL 8.4 LTS** database `on_the_ledge` (local). Schema and seed already exist; SQL under `sql/` documents them but must not be re-applied casually.
-2. **Next.js App Router** reads/writes MySQL through a **server-only** `mysql2/promise` connection pool.
-3. **Handoff docs** (`ARCHITECTURE.md`, `CHECKLIST.md`, `STATE.md`).
+1. **MySQL 8.4 LTS** database `on_the_ledge` (local): five tables + Review 2 view/routines/triggers.
+2. **SQL source of truth for Review 2:** `database/01_schema.sql` … `04_review2_demo_queries.sql`.
+3. **Optional Review-1 Next.js demo** under `src/` still uses `mysql2/promise` (not required for Review 2 viva).
+4. **Handoff docs** (`ARCHITECTURE.md`, `CHECKLIST.md`, `STATE.md`).
 
 There is no authentication, no Supabase, and no external financial APIs.
 
 ```
-Browser (Next.js pages)
-        |
-        |  Server Components / Server Actions
-        v
-src/lib/db.ts  (mysql2/promise pool, env credentials)
-        |
-        v
-MySQL 8.4  →  database on_the_ledge
+database/*.sql  →  MySQL 8.4 (on_the_ledge)
+                      ↑
+src/lib/db.ts  (optional Review-1 UI path)
 ```
 
 ## Technology stack
@@ -34,8 +30,9 @@ MySQL 8.4  →  database on_the_ledge
 | Frontend | Next.js (App Router, TypeScript, Tailwind) |
 | Database | **MySQL 8.4 LTS** (`on_the_ledge`), local |
 | Driver | `mysql2` / `mysql2/promise` (server-side pool only) |
-| Config | `.env.local` (`MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`) |
-| Schema reference | `sql/01_schema.sql`, `sql/02_seed.sql` (already applied; do not regenerate without instruction) |
+| Config | `.env.local` for the optional Next.js path |
+| Review 2 SQL | `database/` (schema, seed, routines, demos) |
+| Legacy Review 1 SQL copies | `sql/` |
 | Not used | Supabase, PostgreSQL, Firebase, MongoDB |
 
 ## Database architecture
