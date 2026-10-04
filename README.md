@@ -1,27 +1,90 @@
-# On-the-ledge
+# On-the-Ledge
 
-Purpose-based personal budgeting ledger (Review 1).
+On-the-Ledge is a purpose-based personal budgeting application.
 
-Handoff docs: [ARCHITECTURE.md](./ARCHITECTURE.md), [CHECKLIST.md](./CHECKLIST.md), [STATE.md](./STATE.md).  
-Schema reference (already applied to local MySQL): `sql/`.
+Instead of only recording where money was spent, the project helps users assign a monthly budget to categories such as Rent, Food, Travel, Shopping, Entertainment, and Savings. Expenses are then recorded against these allocations to show how much remains for each category.
 
-## Stack
+## Status
 
-- Next.js (App Router)
-- **MySQL 8.4 LTS**, database `on_the_ledge`
-- `mysql2/promise` server-side pool (credentials in `.env.local` only)
+Under construction.
 
-## Setup
+The database foundation and budgeting logic are currently being developed. The frontend will be expanded later.
 
-1. Copy `.env.example` → `.env.local` and fill MySQL credentials.
-2. Confirm MySQL is running and `on_the_ledge` is already seeded (do not re-run schema casually).
-3. Install and run:
+## Core Features
 
-```bash
+- Multiple users with separate budgets and transactions
+- Monthly budget creation
+- Category-wise budget allocation
+- Expense transaction logging
+- Remaining-budget calculation
+- Database validation for invalid or over-budget expenses
+
+## Technology
+
+- MySQL 8.0+
+- MySQL Workbench
+- Next.js and TypeScript for the application interface
+
+## Local Setup
+
+### 1. Clone the repository
+
+```
+git clone <repository-url>
+cd on-the-ledge
+```
+
+### 2. Install dependencies
+
+```
 npm install
+```
+
+### 3. Configure local environment variables
+
+Create a `.env.local` file using `.env.example` as a reference.
+
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=on_the_ledge
+DB_USER=root
+DB_PASSWORD=your_local_mysql_password
+```
+
+Do not commit `.env.local`.
+
+### 4. Set up MySQL
+
+Open MySQL Workbench, connect to your local MySQL server, and run these files in order:
+
+```
+database/01_schema.sql
+database/02_seed_data.sql
+database/03_routines.sql
+```
+
+To explore and test the database features, open:
+
+```
+database/04_review2_demo_queries.sql
+```
+
+### 5. Run the application
+
+```
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Review 1 UI hardcodes `user_id = 1` (Aarav).
+Open `http://localhost:3000` in a browser.
 
-Routes: `/` dashboard, `/transactions`, `/add-expense`.
+## Database Structure
+
+```
+users
+  ├── budgets
+  │     └── budget_allocations ── categories
+  └── transactions ────────────── categories
+```
+
+Each user’s budget and transaction data is tied to their own user ID. Categories are shared master entries, while allocations and expenses remain separate for every user.
